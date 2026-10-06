@@ -199,7 +199,7 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
 </script>
 <script>
 (function () {
-"use strict";
+  "use strict";
 
   var POLL_MS = 2000;
   var API = {
@@ -311,12 +311,12 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
 
   function openDetail(k) {
     active = k;
-$("menuView").classList.add("hidden");
-$("detailView").classList.remove("hidden");
+    $("menuView").classList.add("hidden");
+    $("detailView").classList.remove("hidden");
     $("projectView").classList.add("hidden");
     $("settingsView").classList.add("hidden");
-renderDetail(k);
-}
+    renderDetail(k);
+  }
 
   function backMenu() {
     active = null;
@@ -433,11 +433,11 @@ renderDetail(k);
   setInterval(pollSensors, POLL_MS);
 
   function openProject() {
-  $("menuView").classList.add("hidden");
-  $("detailView").classList.add("hidden");
-  $("settingsView").classList.add("hidden");
-  $("projectView").classList.remove("hidden");
-}
+    $("menuView").classList.add("hidden");
+    $("detailView").classList.add("hidden");
+    $("settingsView").classList.add("hidden");
+    $("projectView").classList.remove("hidden");
+  }
   function closeProject() {
     showMenuOnly();
   }
@@ -462,12 +462,12 @@ renderDetail(k);
   }
 
   function openSettings() {
-  $("menuView").classList.add("hidden");
-  $("detailView").classList.add("hidden");
+    $("menuView").classList.add("hidden");
+    $("detailView").classList.add("hidden");
     $("projectView").classList.add("hidden");
-  $("settingsView").classList.remove("hidden");
-  loadWifiConfig();
-}
+    $("settingsView").classList.remove("hidden");
+    loadWifiConfig();
+  }
   function closeSettings() {
     showMenuOnly();
     $("wifiMsg").textContent = "";
@@ -487,8 +487,8 @@ renderDetail(k);
     if (!ssid) {
       $("wifiMsg").style.color = "var(--red)";
       $("wifiMsg").textContent = "Debes ingresar el nombre de la red.";
-    return;
-  }
+      return;
+    }
     fetchJson(API.wifi, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -511,9 +511,9 @@ renderDetail(k);
   function getPageUrl() {
     if (location.protocol === "http:" || location.protocol === "https:") {
       return location.origin + location.pathname;
+    }
+    return location.href;
   }
-  return location.href;
-}
 
   function openQR() {
     var url = getPageUrl();
@@ -536,11 +536,11 @@ renderDetail(k);
         url +
         "</div>";
     }
-  $("qrModal").classList.remove("hidden");
-}
+    $("qrModal").classList.remove("hidden");
+  }
   function closeQR() {
-  $("qrModal").classList.add("hidden");
-}
+    $("qrModal").classList.add("hidden");
+  }
   $("qrBtn").addEventListener("click", openQR);
   $("qrCloseBtn").addEventListener("click", closeQR);
   $("qrModal").addEventListener("click", function (e) {

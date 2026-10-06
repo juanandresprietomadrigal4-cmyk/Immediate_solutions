@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<title>Invernadero · Monitor</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header>
+<div class="brand"><div class="brand-icon" aria-hidden="true">🌿</div><div><h1>Invernadero</h1><p id="clock">--:--:--</p></div></div>
+<div style="display:flex;align-items:center;gap:8px">
+<div class="status"><span id="connLabel">Conectando…</span><i id="connDot" class="dot"></i></div>
+<button id="qrBtn" class="project-btn" type="button" aria-label="Mostrar código QR"><img class="btn-icon-qr" src="img/qr-icon.svg" width="20" height="20" alt=""> <span>QR</span></button>
+<button id="projectBtn" class="project-btn" type="button" aria-label="Información del proyecto">ℹ <span>Proyecto</span></button>
+<button id="settingsBtn" class="settings-btn" type="button" aria-label="Configuración Wi-Fi">⚙ <span>Configuración</span></button>
+</div>
+</header>
+<main>
+<section id="menuView">
+<div class="hero"><h2>Variables del invernadero</h2><p>Selecciona una variable para consultar toda su información.</p></div>
+<div class="menu-grid">
+<button class="variable-btn temp" data-key="t" type="button">
+<div class="top"><div><div class="name">Temperatura</div><div class="reading"><span id="menuT">--.-</span> <small>°C</small></div></div><div class="icon">🌡️</div></div>
+<span id="stateT" class="state">Sin datos</span>
+</button>
+<button class="variable-btn hum" data-key="h" type="button">
+<div class="top"><div><div class="name">Humedad del aire</div><div class="reading"><span id="menuH">--.-</span> <small>%</small></div></div><div class="icon">💧</div></div>
+<span id="stateH" class="state">Sin datos</span>
+</button>
+<button class="variable-btn gas" data-key="g" type="button">
+<div class="top"><div><div class="name">Gas MQ135</div><div class="reading"><span id="menuG">---</span> <small>ppm est.</small></div></div><div class="icon">☁️</div></div>
+<span id="stateG" class="state">Sin datos</span>
+</button>
+</div>
+<p id="footerNote" class="footer-note">Cargando datos…</p>
+</section>
+
+<section id="detailView" class="detail hidden">
+<button id="backBtn" class="back" type="button">← Volver al menú</button>
+<div class="detail-card">
+<div class="detail-head"><div><h2 id="detailName">Variable</h2><p id="detailDesc">Información de la variable</p></div><div id="detailIcon" class="detail-icon">•</div></div>
+<div class="current">
+<div class="current-label">Valor actual</div>
+<div class="current-value"><span id="detailValue">--</span> <small id="detailUnit"></small></div>
+<span id="detailState" class="badge">Sin datos</span>
+</div>
+<div class="info-grid">
+<div class="info"><span>Mínimo registrado</span><strong id="detailMin">--</strong></div>
+<div class="info"><span>Máximo registrado</span><strong id="detailMax">--</strong></div>
+<div class="info"><span>Rango óptimo</span><strong id="detailOptimal">--</strong></div>
+<div class="info"><span>Rango de atención</span><strong id="detailWarn">--</strong></div>
+<div class="info"><span>Unidad</span><strong id="detailUnitInfo">--</strong></div>
+<div class="info"><span>Conexión del sensor</span><strong id="detailId">--</strong></div>
+<div class="info"><span>Última actualización</span><strong id="detailTime">--:--:--</strong></div>
+<div class="info"><span>Estado del sistema</span><strong id="detailSysState">--</strong></div>
+</div>
+<div class="detail-actions">
+<button id="resetStatsBtn" type="button">Reiniciar mín / máx de sesión</button>
+</div>
+</div>
+</section>
+
+<section id="projectView" class="project-panel hidden">
+<button id="projectBackBtn" class="back" type="button">← Volver al menú</button>
+<div class="project-card">
+<div class="project-head">
+<div><h2>Información del proyecto</h2><p>Arquitectura: sensores → ESP32 → API REST → interfaz web.</p></div>
+<div class="project-icon">🌿</div>
+</div>
+<div class="project-intro">
+Este sistema supervisa temperatura, humedad y calidad del aire en un invernadero. Un ESP32 lee DHT22 y MQ135, expone una API JSON y sirve esta interfaz desde flash. La carpeta <strong>web/</strong> es la fuente de la UI; el script <strong>tools/build_web_bundle.py</strong> genera el HTML embebido para el firmware.
+</div>
+<div class="project-grid">
+<div class="project-info"><span>Nombre del proyecto</span><strong>Sistema de Monitoreo de Invernadero</strong></div>
+<div class="project-info"><span>Plataforma</span><strong>ESP32 (PlatformIO)</strong></div>
+<div class="project-info"><span>API</span><strong>/api/sensors, /api/status, /api/wifi</strong></div>
+<div class="project-info"><span>Sensores</span><strong>DHT22 (GPIO 4) · MQ135 (GPIO 34)</strong></div>
+<div class="project-info"><span>Interfaz</span><strong>Servidor web en el ESP32</strong></div>
+<div class="project-info"><span>Actualización</span><strong>Cada 2 segundos</strong></div>
+<div class="project-info"><span>Desarrollo local</span><strong>python tools/dev_server.py</strong></div>
+<div class="project-info"><span>Estado</span><strong class="project-status"><i></i>Integrado hardware + web</strong></div>
+</div>
+</div>
+</section>
+
+<section id="settingsView" class="settings-panel hidden">
+<button id="settingsBackBtn" class="back" type="button">← Volver al menú</button>
+<div class="settings-card">
+<div class="settings-head">
+<div><h2>Configuración de Wi‑Fi</h2><p>Se guarda en la memoria del ESP32 (NVS). Tras guardar, el dispositivo se reinicia y se conecta a la red.</p></div>
+<div style="font-size:2rem">⚙️</div>
+</div>
+<div class="form-group">
+<label for="wifiSsid">Nombre de la red Wi‑Fi (SSID)</label>
+<input id="wifiSsid" type="text" placeholder="Ejemplo: MiCasa_WiFi" autocomplete="off">
+</div>
+<div class="form-group">
+<label for="wifiPass">Contraseña del Wi‑Fi</label>
+<div class="pass-row">
+<input id="wifiPass" type="password" placeholder="Ingresa la contraseña" autocomplete="new-password">
+<button id="togglePass" class="pass-toggle" type="button">Mostrar</button>
+</div>
+</div>
+<button id="saveWifiBtn" class="save-btn" type="button">Guardar y reiniciar ESP32</button>
+<div id="wifiMsg" class="success"></div>
+<div class="current-wifi">
+<span>Red configurada en el ESP32</span>
+<strong id="currentSsid">Sin configurar</strong>
+</div>
+</div>
+</section>
+</main>
+
+<div id="qrModal" class="qr-back hidden" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+<div class="qr-modal">
+<h3 id="qrTitle">Código QR de acceso</h3>
+<p>Escanea este código desde otro dispositivo en la misma red.</p>
+<div id="qrBox" class="qr-box"></div>
+<div id="qrUrl" class="qr-url"></div>
+<button id="qrCloseBtn" class="qr-close" type="button">Cerrar</button>
+</div>
+</div>
+
+<script src="js/qrcode.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
